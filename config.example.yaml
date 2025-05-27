@@ -1,0 +1,8 @@
+token: YOUR_TOKEN
+admin_chat: YOUR_ADMIN_CHAT_ID
+admins: 
+   - FIRST_ADMIN_ID
+   - SECOND_ADMIN_ID
+channel: CHANNEL_ID
+mode: one or all 
+# if mode is set to all, bot waits until all members of admin_chat vote positively. if it is set to one, one vote will be enough
