@@ -44,7 +44,7 @@ def start(message: tb.types.Message):
         pass
     bot.reply_to(
         message,
-        tb.formatting.escape_markdown(
+        tb.formatting.escape_html(
             "Привет! Я - предложка. Отправь мне то, что хочешь увидеть в канале. На данный момент я не умею корректно обрабатывать группы файлов, поэтому, пожалуйста, отправляй их по одному (админы поймут)"
         ),
     )
@@ -60,7 +60,7 @@ def broadcast(msg: tb.types.Message):
             try:
                 bot.send_message(i, text, reply_markup=None)
             except Exception as e:
-                bot.send_message(5471070238, str(e))
+                bot.send_message(config.admin_chat, str(e))
 
 
 def autosend_no_id(chat_id: int, message: tb.types.Message, reply_markup=None):
@@ -68,7 +68,7 @@ def autosend_no_id(chat_id: int, message: tb.types.Message, reply_markup=None):
     content_mapping = {
         "text": lambda chat_id, *args, **kwargs: bot.send_message(
             chat_id=chat_id,
-            parse_mode=message.text,
+            text=message.text,
             entities=message.entities,
             *args,
             **kwargs,
@@ -117,15 +117,15 @@ def autosend_with_id(chat_id: int, message: tb.types.Message, reply_markup=None)
     set_last(last)
     content_mapping = {
         "text": lambda chat_id, *args, **kwargs: bot.send_message(
-            chat_id,
-            f"#{last}\n{message.text}",
+            chat_id=chat_id,
+            text=f"#{last}\n{message.text}",
             *args,
             **kwargs,
         ),
         "photo": lambda chat_id, *args, **kwargs: bot.send_photo(
             chat_id,
             message.photo[-1].file_id,
-            caption=f"{last}\n{message.caption}",
+            caption=f"#{last}\n{message.caption}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
@@ -133,7 +133,7 @@ def autosend_with_id(chat_id: int, message: tb.types.Message, reply_markup=None)
         "document": lambda chat_id, *args, **kwargs: bot.send_document(
             chat_id,
             message.document.file_id,
-            caption=f"{last}\n{message.caption}",
+            caption=f"#{last}\n{message.caption}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
@@ -170,14 +170,12 @@ def suggest(message: tb.types.Message):
                 {"approved": [], "rejected": [], "author": message.from_user.id}, F
             )
     except ValueError:
-        bot.reply_to(
-            message, tb.formatting.escape_markdown("Неподдерживаемое вложение.")
-        )
+        bot.reply_to(message, tb.formatting.escape_html("Неподдерживаемое вложение."))
         logging.warn(message.content_type)
         return
     rk = tb.types.InlineKeyboardMarkup()
     rk.add(tb.types.InlineKeyboardButton("отправить еще", callback_data="send_more"))
-    bot.reply_to(message, "Принято\.", reply_markup=rk)
+    bot.reply_to(message, "Принято.", reply_markup=rk)
     return
 
 
@@ -215,14 +213,14 @@ def callback_inline(call):
                 ),
             )
         except Exception as E:
-            bot.send_message(5471070238, str(E))
+            bot.send_message(config.admin_chat, str(E))
 
 
 @bot.callback_query_handler(func=lambda call: call.data == "send_more")
 def getsuggest(call):
     bot.reply_to(
         call.message,
-        tb.formatting.escape_markdown("Отправляй."),
+        tb.formatting.escape_html("Отправляй."),
     )
     bot.register_next_step_handler(call.message, suggest)
 
@@ -239,7 +237,7 @@ def get_author(call):
                     f"автор: {tb.util.user_link(user)}",
                 )
             except Exception as E:
-                bot.send_message(5471070238, str(E))
+                bot.send_message(config.admin_chat, str(E))
 
 
 def ban(uid: int, reason: str):
