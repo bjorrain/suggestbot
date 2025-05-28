@@ -9,7 +9,6 @@ import datetime
 logging.basicConfig(level=logging.INFO)
 with open("config.yaml") as f:
     config = SimpleNamespace(**yaml.safe_load(f))
-    print(config)
     bot = tb.TeleBot(config.token, parse_mode="HTML")
 
 
