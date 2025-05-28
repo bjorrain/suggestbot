@@ -231,8 +231,8 @@ def get_author(call):
             f: dict = yaml.safe_load(F)
             try:
                 user = bot.get_chat_member(config.channel, f.get("author")).user
-                bot.send_message(
-                    config.admin_chat,
+                bot.reply_to(
+                    call.message,
                     f"автор: {'@' + user.username if user.username else 'tg://user?id=' + str(user.id)}",
                 )
             except Exception as E:
