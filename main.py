@@ -233,7 +233,7 @@ def get_author(call):
                 user = bot.get_chat_member(config.channel, f.get("author")).user
                 bot.send_message(
                     config.admin_chat,
-                    f"автор: {tb.util.user_link(user)}",
+                    f"автор: {'@' + user.username if user.username else 'tg://user?id=' + str(user.id)}",
                 )
             except Exception as E:
                 bot.send_message(config.admin_chat, str(E))
