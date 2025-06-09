@@ -75,7 +75,7 @@ def autosend_no_id(chat_id: int, message: tb.types.Message, reply_markup=None):
         "photo": lambda chat_id, *args, **kwargs: bot.send_photo(
             chat_id,
             message.photo[-1].file_id,
-            caption=f"{message.caption}",
+            caption=f"{message.caption if message.caption else ''}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
@@ -83,7 +83,7 @@ def autosend_no_id(chat_id: int, message: tb.types.Message, reply_markup=None):
         "document": lambda chat_id, *args, **kwargs: bot.send_document(
             chat_id,
             message.document.file_id,
-            caption=f"{message.caption}",
+            caption=f"{message.caption if message.caption else ''}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
@@ -91,7 +91,7 @@ def autosend_no_id(chat_id: int, message: tb.types.Message, reply_markup=None):
         "video": lambda chat_id, *args, **kwargs: bot.send_video(
             chat_id,
             message.video.file_id,
-            caption=f"#{message.id} {message.caption}",
+            caption=f"{message.caption if message.caption else ''}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
@@ -124,7 +124,7 @@ def autosend_with_id(chat_id: int, message: tb.types.Message, reply_markup=None)
         "photo": lambda chat_id, *args, **kwargs: bot.send_photo(
             chat_id,
             message.photo[-1].file_id,
-            caption=f"#{last}\n{message.caption}",
+            caption=f"#{last}\n{message.caption if message.caption else ''}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
@@ -132,7 +132,7 @@ def autosend_with_id(chat_id: int, message: tb.types.Message, reply_markup=None)
         "document": lambda chat_id, *args, **kwargs: bot.send_document(
             chat_id,
             message.document.file_id,
-            caption=f"#{last}\n{message.caption}",
+            caption=f"#{last}\n{message.caption if message.caption else ''}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
@@ -140,7 +140,7 @@ def autosend_with_id(chat_id: int, message: tb.types.Message, reply_markup=None)
         "video": lambda chat_id, *args, **kwargs: bot.send_video(
             chat_id,
             message.video.file_id,
-            caption=f"#{last}\n{message.caption}",
+            caption=f"#{last}\n{message.caption if message.caption else ''}",
             caption_entities=message.caption_entities,
             *args,
             **kwargs,
